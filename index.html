@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asociación de Rescate de Perritos</title>
+    <!-- Enlaces a las bibliotecas de Google Maps API -->
+    <!-- Incluir jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkx8ZPwcFziyPqjMNb247_Qm4ckd8KW7g&callback=initMap"
+        async defer></script>
+    <script src="./Scripts/geolocation.js"></script>
+    <script src="./Scripts/initMap.js"></script>
+    <script src="./Scripts/form.js"></script>
+    <script src="./Scripts/markers.js"></script>
+    <script src="./Scripts/main.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./Styles/Style.css">
+    <link rel="stylesheet" href="./Styles/Modal.css">
+</head>
+
+<body>
+
+    <header class="custom-header">
+        <div>
+            <h1>De Vuelta a Casa</h1>
+            <p>Una aplicación para ayudar a encontrar a lomitos extraviados</p>
+        </div>
+    </header>
+
+    <!-- Modal 1-->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalle del la mascota</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="imagen.jpg" alt="Imagen del Perrito">
+                    <!-- Asegúrate de proporcionar una imagen válida -->
+                    <p id="modalName">Nombre de la Mascota</p> <!-- Campo de nombre -->
+                    <p id="modalDescription">Descripción de la Mascota</p> <!-- Campo de descripción -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal2 -->
+    <div class="modal fade" id="ChoiseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <!-- Cambio: Agregar la clase modal-lg para hacer el modal más grande -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Selecciona una opción</h5>
+                </div>
+                <div class="modal-body">
+                    <p>¿Qué deseas hacer?</p>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button id="searchBtn" class="btn btn-primary">Estoy buscando</button>
+                        <button id="reportBtn" class="btn btn-secondary">Quiero reportar un lomito extraviado</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario para búsqueda -->
+    <div id="searchFormList" style="display: none;">
+        <h3>Formulario de Búsqueda</h3>
+        <form id="searchForm">
+            <label for="Nombre">Nombre:</label>
+            <input type="text" id="Nombre" name="Nombre"><br>
+            <label for="Descripcion">Descripción:</label>
+            <input type="text" id="Descripcion" name="Descripcion"><br>
+            <label for="Color">Color:</label>
+            <input type="text" id="Color" name="Color"><br>
+            <label for="Genero">Género:</label>
+            <input type="text" id="Genero" name="Genero"><br>
+            <label for="Domicilio">Domicilio:</label>
+            <input type="text" id="Domicilio" name="Domicilio"><br>
+            <label for="Latitud">Latitud:</label>
+            <input type="text" id="Latitud" name="Latitud"><br>
+            <label for="Longitud">Longitud:</label>
+            <input type="text" id="Longitud" name="Longitud"><br>
+            <label for="Imagen">Imagen:</label>
+            <input type="text" id="Imagen" name="Imagen"><br>
+            <input type="submit" value="Buscar">
+        </form>
+    </div>
+
+    <!-- Formulario para reportar -->
+    <div id="reportFormList" style="display: none;">
+        <h3>Formulario de Reporte</h3>
+        <form id="reportForm">
+            <label for="Nombre">Nombre:</label>
+            <input type="text" id="Nombre" name="Nombre"><br>
+            <label for="Descripcion">Descripción:</label>
+            <input type="text" id="Descripcion" name="Descripcion"><br>
+            <label for="Color">Color:</label>
+            <input type="text" id="Color" name="Color"><br>
+            <label for="Genero">Género:</label>
+            <input type="text" id="Genero" name="Genero"><br>
+            <label for="Domicilio">Domicilio:</label>
+            <input type="text" id="Domicilio" name="Domicilio"><br>
+            <label for="Latitud">Latitud:</label>
+            <input type="text" id="Latitud" name="Latitud"><br>
+            <label for="Longitud">Longitud:</label>
+            <input type="text" id="Longitud" name="Longitud"><br>
+            <label for="Imagen">Imagen:</label>
+            <input type="text" id="Imagen" name="Imagen"><br>
+            <input type="submit" value="Enviar Reporte">
+        </form>
+    </div>
+
+    <!-- Agregar el botón para filtrar mascotas perdidas -->
+    <div class="container">
+        <div id="searchContainer">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre o descripción...">
+        </div>
+        <div class="btn-group" role="group" aria-label="Filtrar mascotas">
+            <button type="button" class="btn btn-info" id="lostBtn">Mascotas Perdidas</button>
+            <button type="button" class="btn btn-warning" id="reportedBtn">Mascotas Reportadas</button>
+        </div>
+        <h2>Mapa de Perritos Extraviados</h2>
+        <!-- Div para mostrar el mapa -->
+        <div id="mapContainer">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <footer>
+        <h2>Derechos Reservados VC 2024</h2>
+    </footer>
+
+    <script>
+        $(document).ready(function () {
+            // Mostrar el modal al cargar la página
+            $('#ChoiseModal').modal('show');
+
+            // Evento al hacer clic en "Estoy buscando"
+            $('#searchBtn').click(function () {
+                // Acción cuando el usuario selecciona "Estoy buscando"
+                $('#ChoiseModal').modal('hide'); // Oculta el modal inicial
+                $('#searchFormList').show(); // Muestra el formulario de búsqueda
+            });
+
+            // Evento al hacer clic en "Quiero reportar un lomito extraviado"
+            $('#reportBtn').click(function () {
+                // Acción cuando el usuario selecciona "Quiero reportar un lomito extraviado"
+                $('#ChoiseModal').modal('hide'); // Oculta el modal inicial
+                $('#reportFormList').show(); // Muestra el formulario de reporte
+            });
+
+            // Aquí puedes agregar más eventos según sea necesario
+        });
+    </script>
+
+</body>
+
+</html>
